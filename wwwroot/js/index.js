@@ -1,21 +1,27 @@
 function createGrid(date1, date2, interval)
 {
-    let row = document.createElement("div");
+
+    const row = document.createElement("div");
     row.classList.add("row", "row-cols-auto");
+    const copiedDate1 = new Date(date1.getTime());
+    const copiedDate2 = new Date(date2.getTime());
     while(true) {
         const col = document.createElement("div");
-        let hour = date1.getHours();
-        let minute = date1.getMinutes();
+        let hour = copiedDate1.getHours();
+        let minute = copiedDate1.getMinutes();
         hour = hour < 10 ? "0" + hour : hour;
         minute = minute == 0 ? "00" : minute;
         col.textContent = `${hour}:${minute}`;
         col.classList.add("cell", "col");
         row.appendChild(col);        
-        date1.setMinutes(date1.getMinutes() + interval);
-        if (date1 >= date2)
+        copiedDate1.setMinutes(copiedDate1.getMinutes() + interval);
+        if (copiedDate1 >= copiedDate2)
             break;
     }
-    document.getElementById("mainContainer").appendChild(row);
+    let mainContainer = document.getElementById("mainContainer");
+    mainContainer.innerHTML = '';
+    mainContainer.appendChild(createCalendar());
+    mainContainer.appendChild(row);
 }
 // => YYYY-MM-DD
 function formatDate(date)
@@ -29,17 +35,22 @@ function formatDate(date)
 
 function createCalendar()
 {
-    const calendar = document.getElementById("calendar");
+    const calendar = document.createElement("input");
+    calendar.setAttribute("type", "date");
+    calendar.setAttribute("id", "calendar");
     let now = new Date();
     calendar.setAttribute("min", formatDate(now));
     let max = new Date(now);
     max.setMonth(now.getMonth() + 2);
     calendar.setAttribute("max", formatDate(max));
+    calendar.value = formatDate(now);
+    return calendar;
 }
 
-const date1 = new Date(2023, 5, 24, 8, 0);
-const date2 = new Date(2023, 5, 24, 17, 0);
-createCalendar();
+const date1 = new Date(2023, 6, 4, 8, 0);
+const date2 = new Date(2023, 6, 4, 17, 0);
+createGrid(date1, date2, 20);
+const calendar = document.getElementById("calendar");
 calendar.onchange = () => {
     createGrid(date1, date2, 20);
 };
