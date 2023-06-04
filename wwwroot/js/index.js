@@ -1,8 +1,7 @@
 function createGrid(date1, date2, interval)
 {
-
-    const row = document.createElement("div");
-    row.classList.add("row", "row-cols-auto");
+    const grid = document.createElement("div");
+    grid.classList.add("row", "row-cols-auto");
     const copiedDate1 = new Date(date1.getTime());
     const copiedDate2 = new Date(date2.getTime());
     while(true) {
@@ -13,15 +12,12 @@ function createGrid(date1, date2, interval)
         minute = minute == 0 ? "00" : minute;
         col.textContent = `${hour}:${minute}`;
         col.classList.add("cell", "col");
-        row.appendChild(col);        
+        grid.appendChild(col);        
         copiedDate1.setMinutes(copiedDate1.getMinutes() + interval);
         if (copiedDate1 >= copiedDate2)
             break;
     }
-    let mainContainer = document.getElementById("mainContainer");
-    mainContainer.innerHTML = '';
-    mainContainer.appendChild(createCalendar());
-    mainContainer.appendChild(row);
+    return grid;
 }
 // => YYYY-MM-DD
 function formatDate(date)
@@ -47,10 +43,21 @@ function createCalendar()
     return calendar;
 }
 
-const date1 = new Date(2023, 6, 4, 8, 0);
-const date2 = new Date(2023, 6, 4, 17, 0);
-createGrid(date1, date2, 20);
-const calendar = document.getElementById("calendar");
-calendar.onchange = () => {
-    createGrid(date1, date2, 20);
-};
+const mainContainer = document.getElementById("mainContainer");
+mainContainer.innerHTML = '';
+mainContainer.appendChild(createCalendar());
+
+fetch("/", { 
+    method: "POST", 
+    headers: { "Accept": "application/json", "Content-Type": "application/json" },
+    body: JSON.stringify({
+        date: document.getElementById("calendar").value
+    })
+});
+// const date1 = new Date(2023, 6, 4, 8, 0);
+// const date2 = new Date(2023, 6, 4, 17, 0);
+// createGrid(date1, date2, 20);
+// const calendar = document.getElementById("calendar");
+// calendar.onchange = () => {
+//     createGrid(date1, date2, 20);
+// };

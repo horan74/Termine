@@ -4,9 +4,17 @@ namespace Termine.AddControllersWithViews
 {
     public class HomeController : Controller
     {
-        public IActionResult Index() 
+        public async Task<IActionResult> Index() 
         {
+            try {
+                var json = await Request.ReadFromJsonAsync<Date>();
+                if (json != null)
+                Console.WriteLine($"{json.date}");
+            }
+            catch {}
             return View();
         }
     }
+
+    public record Date(String date);
 }
