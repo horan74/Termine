@@ -17,3 +17,7 @@
 .cell:hover {
     background-color: rgb(137, 177, 250);
 }
+
+.schedulerow {
+    margin-top: 2%;
+}

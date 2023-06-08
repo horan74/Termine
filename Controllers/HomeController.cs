@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Termine.AddControllersWithViews
+namespace Termine.Controllers
 {
     public class HomeController : Controller
     {
@@ -9,7 +9,10 @@ namespace Termine.AddControllersWithViews
             try {
                 var json = await Request.ReadFromJsonAsync<Date>();
                 if (json != null)
-                Console.WriteLine($"{json.date}");
+                {
+                    DateOnly dateOnly = DateOnly.Parse(json.date);
+                    Console.WriteLine($"{(int)DayOfWeek.Sunday}");
+                }
             }
             catch {}
             return View();
