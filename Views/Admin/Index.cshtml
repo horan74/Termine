@@ -1,3 +1,32 @@
+@using Termine.Models
+@model Termine.Models.ScheduleDays
+
 <div class="container text-center" id="mainContainer">
+    @using(Html.BeginForm())
+    {
+    @for (int i = 0; i < Model.scheduleDays.Count; i++)
+        {
+            <div class="schedulerow row">
+                @{
+                    var item = Model.scheduleDays[i];
+                    String dayName = ((DayOfWeek) item.dayOfWeek).ToString();
+                    String dayTimeFrom = dayName.ToLower() + "From";
+                    String dayTimeTo = dayName.ToLower() + "To";
+                }
+                <div class="col-1">@dayName</div>
+                <div class="col-2">
+                    @Html.Hidden($"ScheduleDays[{i}].dayOfWeek", item.dayOfWeek)
+                    @Html.Label(dayTimeFrom, "from")
+                    <input type="time" id=@dayTimeFrom name="ScheduleDays[@i].from" value="@item.from" step="3600"/>
+                </div>
+                <div class="col-2">
+                    @Html.Label(dayTimeTo, "to")
+                    <input type="time" id=@dayTimeTo name="ScheduleDays[@i].to" value="@item.to" step="3600"/>
+                </div>
+            </div>
+        }
+        <input type="submit" class="btn btn-primary" value="Save"/>
+    }
+        
 </div>
 <script src="~/js/admin.js"></script>
