@@ -28,7 +28,6 @@ namespace Termine.Controllers
                         scheduleDays.Add(new ScheduleDay(dayOfWeek, from, to));
                     }
                 }
-                await connection.CloseAsync();
             } 
             return View(new ScheduleDays(scheduleDays));
         }
