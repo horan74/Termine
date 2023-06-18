@@ -6,14 +6,14 @@ namespace Termine.Controllers
 {
     public class AdminController : Controller
     {
-        static string connectionString = "Server=(localdb)\\mssqllocaldb;Database=master;Trusted_Connection=True;";
+        // static string connectionString = "Server=(localdb)\\mssqllocaldb;Database=master;Trusted_Connection=True;";
         static string selectAll = "SELECT * FROM master.dbo.Schedule";
         List<ScheduleDay> scheduleDays = new List<ScheduleDay>();
         
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            using(SqlConnection connection = new SqlConnection(connectionString))
+            using(SqlConnection connection = new SqlConnection(DatabaseHelper.DatabaseHelper.ConnectionString))
             {
                 await connection.OpenAsync();
                 SqlCommand command = new SqlCommand(selectAll, connection);
@@ -38,7 +38,7 @@ namespace Termine.Controllers
             string insertValues = String.Empty;
             foreach(var time in days.scheduleDays)
                 insertValues += $"UPDATE master.dbo.Schedule SET [From]='{time.from}', [To]='{time.to}' WHERE DayOfWeek={time.dayOfWeek};";
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(DatabaseHelper.DatabaseHelper.ConnectionString))
             {
                 await connection.OpenAsync();
                 SqlCommand command = new SqlCommand(insertValues, connection);

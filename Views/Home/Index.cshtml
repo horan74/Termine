@@ -1,3 +1,9 @@
+@model Termine.Models.ScheduleDay
+
 <div class="container text-center" id="mainContainer">
+    <form action="/", method="post", id="dateForm">
+        <input type="date" name="date" value=@ViewData["DateString"] onchange="send(this.value)"/>
+    </form>
+    <p>@Model.from @Model.to</p>
 </div>
 <script src="~/js/index.js"></script>
