@@ -4,9 +4,9 @@ using Termine.Models;
 
 namespace Termine.Controllers
 {
+    [Route("Admin")]
     public class AdminController : Controller
     {
-        // static string connectionString = "Server=(localdb)\\mssqllocaldb;Database=master;Trusted_Connection=True;";
         static string selectAll = "SELECT * FROM master.dbo.Schedule";
         List<ScheduleDay> scheduleDays = new List<ScheduleDay>();
         
@@ -28,12 +28,13 @@ namespace Termine.Controllers
                         scheduleDays.Add(new ScheduleDay(dayOfWeek, from, to));
                     }
                 }
-            } 
+            }
+            ViewData["Interval"] = await DatabaseHelper.DatabaseHelper.SelectSettingsPropertyAsync("Interval"); 
             return View(new ScheduleDays(scheduleDays));
         }
     
         [HttpPost]
-        public async void Index(ScheduleDays days)
+        public async void Index(ScheduleDays days, string interval)
         {
             string insertValues = String.Empty;
             foreach(var time in days.scheduleDays)
@@ -44,6 +45,7 @@ namespace Termine.Controllers
                 SqlCommand command = new SqlCommand(insertValues, connection);
                 await command.ExecuteNonQueryAsync();
             }   
+            await DatabaseHelper.DatabaseHelper.UpdateSettingsPropertyAsync("Interval", interval);
         }
     }
 }

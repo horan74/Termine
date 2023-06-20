@@ -4,6 +4,26 @@
     <form action="/", method="post", id="dateForm">
         <input type="date" name="date" value=@ViewData["DateString"] onchange="send(this.value)"/>
     </form>
-    <p>@Model.from @Model.to</p>
+    @{
+        TimeSpan timeSpan1;
+        TimeSpan timeSpan2;
+        TimeSpan.TryParse(Model.from.ToString(), out timeSpan1);
+        TimeSpan.TryParse(Model.to.ToString(), out timeSpan2);
+        <div class="row">
+        @{
+            int interval = (int) ViewData["Interval"]!;
+            if(timeSpan1 == timeSpan2)
+                {<p>Today is holiday!</p>}
+            while (timeSpan1 < timeSpan2)
+            {
+                string minutes = timeSpan1.Minutes == 0 ? "00" : timeSpan1.Minutes.ToString();
+                <div class="col-lg-1 col-md-3 col-sm-4 col-xs-12 cell">@timeSpan1.Hours:@minutes</div>
+                if ((timeSpan2 - timeSpan1).TotalMinutes == interval)
+                    break;
+                timeSpan1 = timeSpan1.Add(TimeSpan.FromMinutes(interval));
+            }
+        }
+        </div>
+    }
 </div>
 <script src="~/js/index.js"></script>
